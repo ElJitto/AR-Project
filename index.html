@@ -13,12 +13,46 @@ button,.link{background:#ffe5ee;border:0;border-radius:32px;color:#742c47;font:7
 #tools button{font-size:14px;padding:10px 17px}
 #error{max-width:400px;white-space:pre-wrap;color:#ffd9da;font-size:13px}
 .small{font-size:12px;color:#ffe5ee}
-</style></head><body>
+</style>
+<script>
+AFRAME.registerComponent('fit-gltf', {
+  schema: { height: {type: 'number', default: 1} },
+  init() {
+    this.el.addEventListener('model-loaded', () => {
+      const THREE = AFRAME.THREE;
+      const root = this.el.getObject3D('mesh');
+      if (!root) return;
+      root.updateMatrixWorld(true);
+      const localBox = new THREE.Box3();
+      const inverse = new THREE.Matrix4().copy(root.matrixWorld).invert();
+      root.traverse(o => {
+        if (!o.isMesh || !o.geometry) return;
+        if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+        const relative = new THREE.Matrix4().multiplyMatrices(inverse, o.matrixWorld);
+        localBox.union(o.geometry.boundingBox.clone().applyMatrix4(relative));
+      });
+      if (localBox.isEmpty()) return;
+      const originalHeight = localBox.max.y - localBox.min.y;
+      if (!Number.isFinite(originalHeight) || originalHeight <= 0) return;
+      const factor = this.data.height / originalHeight;
+      root.scale.multiplyScalar(factor);
+      root.position.set(
+        -(localBox.min.x + localBox.max.x) * 0.5 * factor,
+        -localBox.min.y * factor,
+        -(localBox.min.z + localBox.max.z) * 0.5 * factor
+      );
+      const name = this.el.getAttribute('data-gltf-label') || this.el.id || '3D';
+      console.log('[Fox AR] loaded', name, 'height', originalHeight, 'scale', factor);
+    });
+  }
+});
+</script>
+</head><body>
 <div id="intro"><h1>🦊 Маленькое волшебство для тебя ♡</h1><img src="./card.png" alt="Подарочная карточка"><p>Нажми «Оживить», разреши доступ к камере и наведи её на лицевую сторону нашей карточки.</p><button type="button" id="start">✨ Оживить карточку</button><div class="small">Лучше всего работает при хорошем освещении</div><div id="error" role="alert"></div><a class="link" href="./preview.html">Посмотреть 3D без камеры</a></div>
 <div id="status">Наведи камеру на карточку · ✨ хвосты и сакура</div>
 <div id="tools"><button type="button" id="smaller" aria-label="Уменьшить">− размер</button><button type="button" id="bigger" aria-label="Увеличить">+ размер</button></div>
 <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; maxTrack:1" embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
-<a-assets timeout="90000"><a-asset-item id="girl" src="./girl.glb"></a-asset-item><a-asset-item id="white" src="./white_fox.glb"></a-asset-item><a-asset-item id="black" src="./black_fox.glb"></a-asset-item></a-assets>
+
 <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 <a-entity light="type:ambient;intensity:1.7;color:#ffffff"></a-entity>
 <a-entity light="type:directional;intensity:2.1;color:#fff6eb" position="-1 2 2"></a-entity>
@@ -27,13 +61,13 @@ button,.link{background:#ffe5ee;border:0;border-radius:32px;color:#742c47;font:7
   <!-- Карточка стоит вертикально перед камерой: фигуры параллельны рисунку и вынесены немного вперёд. -->
   <a-entity id="scale-root" position="0 -.54 .12">
     <a-entity animation__breathe="property:position;from:0 0 0;to:0 .015 0;dur:2400;loop:true;dir:alternate;easing:easeInOutSine" animation__lean="property:rotation;from:0 -1.0 0;to:0 1.0 0;dur:4200;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="#girl" scale=".93 .93 .93" position="0 0 0"></a-gltf-model>
+      <a-gltf-model src="./girl.glb" fit-gltf="height:1.0" data-gltf-label="Девушка" position="0 0 0"></a-gltf-model>
     </a-entity>
     <a-entity position="-.31 0 .07" rotation="0 12 0" animation__float="property:position;from:-.31 0 .07;to:-.31 .025 .07;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="#white" scale=".46 .46 .46" fox-tail-wave="speed:1.0;phase:0"></a-gltf-model>
+      <a-gltf-model src="./white_fox.glb" fit-gltf="height:.45" data-gltf-label="Белый лисёнок"></a-gltf-model>
     </a-entity>
     <a-entity position=".31 0 .07" rotation="0 -12 0" animation__float="property:position;from:.31 .02 .07;to:.31 0 .07;dur:2050;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="#black" scale=".46 .46 .46" fox-tail-wave="speed:1.14;phase:1.7"></a-gltf-model>
+      <a-gltf-model src="./black_fox.glb" fit-gltf="height:.45" data-gltf-label="Чёрный лисёнок"></a-gltf-model>
     </a-entity>
     <a-entity sakura-petals="count:12;spread:1.0;speed:1.0"></a-entity>
     <a-sphere position="-.45 .72 .11" radius=".018" color="#ffbdcc" material="opacity:.85;transparent:true" animation="property:position;from:-.45 .72 .11;to:-.29 .92 .11;dur:3200;dir:alternate;loop:true"></a-sphere>
@@ -41,4 +75,14 @@ button,.link{background:#ffe5ee;border:0;border-radius:32px;color:#742c47;font:7
   </a-entity>
 </a-entity></a-scene>
 <script src="./ar.js"></script>
+<script>
+(()=>{
+ const names=[...document.querySelectorAll('[data-gltf-label]')];const results=new Map();
+ const status=document.getElementById('status');
+ for(const el of names){const name=el.getAttribute('data-gltf-label');
+  el.addEventListener('model-loaded',()=>{results.set(name,'ok');if(results.size===names.length&&![...results.values()].includes('error'))status.textContent='Все три 3D-модели загружены ✨'});
+  el.addEventListener('model-error',e=>{results.set(name,'error');status.textContent='Ошибка загрузки: '+name;console.error('GLB load error',name,e.detail)});
+ }
+})();
+</script>
 </body></html>
