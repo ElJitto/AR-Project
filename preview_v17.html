@@ -1,0 +1,93 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script><script src="./magic_v17.js?v=17"></script><title>Fox Spirits — 3D сцена v17</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#211729;color:white;font:15px system-ui,sans-serif} a{color:inherit}
+#top{position:fixed;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top)) 12px 13px;background:linear-gradient(#241629f0,#24162900);z-index:8;text-align:center;pointer-events:none}
+#top h1{font-size:23px;margin:0}#top p{margin:5px 0;font-size:13px;color:#f7d4e2}
+#bottom{position:fixed;z-index:9;bottom:calc(16px + env(safe-area-inset-bottom));left:10px;right:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{border:0;background:#ffe4ec;border-radius:28px;padding:10px 11px;color:#5d2840;font:700 12px system-ui;text-decoration:none;display:inline-block;cursor:pointer}
+#hint{position:fixed;z-index:8;bottom:95px;left:15px;right:15px;text-align:center;font-size:12px;color:#f6daea;pointer-events:none;text-shadow:0 1px 4px #000}
+a-scene{width:100vw;height:100dvh;display:block}
+#loadreport{position:fixed;top:93px;left:12px;right:12px;z-index:10;text-align:center;font-size:13px;color:#fff;background:#38253dcc;border-radius:12px;padding:6px 8px;pointer-events:none}
+</style>
+<script>
+AFRAME.registerComponent('fit-gltf', {
+  schema: { height: {type: 'number', default: 1} },
+  init() {
+    this.el.addEventListener('model-loaded', () => {
+      const THREE = AFRAME.THREE;
+      const root = this.el.getObject3D('mesh');
+      if (!root) return;
+      root.updateMatrixWorld(true);
+      const localBox = new THREE.Box3();
+      const inverse = new THREE.Matrix4().copy(root.matrixWorld).invert();
+      root.traverse(o => {
+        if (!o.isMesh || !o.geometry) return;
+        if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+        const relative = new THREE.Matrix4().multiplyMatrices(inverse, o.matrixWorld);
+        localBox.union(o.geometry.boundingBox.clone().applyMatrix4(relative));
+      });
+      if (localBox.isEmpty()) return;
+      const originalHeight = localBox.max.y - localBox.min.y;
+      if (!Number.isFinite(originalHeight) || originalHeight <= 0) return;
+      const factor = this.data.height / originalHeight;
+      root.scale.multiplyScalar(factor);
+      root.position.set(
+        -(localBox.min.x + localBox.max.x) * 0.5 * factor,
+        -localBox.min.y * factor,
+        -(localBox.min.z + localBox.max.z) * 0.5 * factor
+      );
+      const name = this.el.getAttribute('data-gltf-label') || this.el.id || '3D';
+      console.log('[Fox AR] loaded', name, 'height', originalHeight, 'scale', factor);
+    });
+  }
+});
+</script>
+</head><body>
+<div id="top"><h1>🦊 Наша маленькая магия ♡</h1><p>Девушка и два лисёнка — анимированный 3D-просмотр</p></div>
+<div id="loadreport">Загрузка персонажей: 0 из 3…</div>
+<div id="hint">Проведи пальцем по экрану, чтобы повернуть сцену. Нажми «♡ Обнять лисят»: девушка согнёт руки, лисята подойдут вплотную, прижмутся к ней и появятся сердечки. Хвосты и лепестки двигаются постоянно. Версия v17 — живые лисята.</div>
+<div id="bottom"><button class="btn" id="reset">По центру</button><button class="btn" id="greet" type="button">♡ Обнять лисят</button><a class="btn" href="./ar_v17.html">📷 Открыть AR</a></div>
+<a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" background="color:#352c41">
+
+<a-camera position="0 1.1 5.4" look-controls="enabled:false" wasd-controls="enabled:false" fov="52"></a-camera>
+<a-entity light="type:ambient;intensity:1.8;color:#ffffff"></a-entity>
+<a-entity light="type:directional;intensity:2.1;color:#fff7f0" position="-2 4 4"></a-entity>
+<a-entity light="type:directional;intensity:.65;color:#d5c6ff" position="2 3 -3"></a-entity>
+<a-plane rotation="-90 0 0" position="0 -0.027 0" width="25" height="25" color="#47364e"></a-plane>
+<a-entity id="turn" position="0 0 0" spirit-show="mode:preview" magic-hearts="centerY:1.17;size:.12">
+  <a-entity data-actor="girl">
+    <a-gltf-model src="./girl_hug_v17.glb?v=17" scale="1.65 1.65 1.65" data-gltf-label="Девушка" morph-clip-player></a-gltf-model>
+  </a-entity>
+  <a-entity data-actor="white">
+    <a-gltf-model src="./white_fox_animated.glb?v=16" scale=".67 .67 .67" data-gltf-label="Белый лисёнок" morph-clip-player></a-gltf-model>
+  </a-entity>
+  <a-entity data-actor="black">
+    <a-gltf-model src="./black_fox_animated.glb?v=16" scale=".67 .67 .67" data-gltf-label="Чёрный лисёнок" morph-clip-player></a-gltf-model>
+  </a-entity>
+  <a-entity sakura-petals="count:14;spread:2.0;speed:1.1" scale="1.6 1.6 1.6" position="0 .2 .2"></a-entity>
+  <a-entity position="0 .01 .1"><a-cylinder radius="1.15" height=".03" color="#c9a2b6" material="roughness:1;opacity:.4;transparent:true"></a-cylinder></a-entity>
+</a-entity>
+</a-scene>
+<script src="./preview.js"></script>
+<script>document.querySelector("#greet").addEventListener("click",()=>document.querySelector("#turn").emit("fox-greet"));</script>
+<script>
+(() => {
+ const targets=[...document.querySelectorAll('[data-gltf-label]')];
+ const results=new Map();
+ const report=document.querySelector('#loadreport');
+ const update=()=>{
+  const loaded=[...results.values()].filter(v=>v==='ok').length;
+  const bad=[...results].filter(([k,v])=>v!=='ok').map(([k])=>k);
+  report.textContent='3D-модели: '+loaded+' / '+targets.length+(bad.length?' · Ошибка: '+bad.join(', '):(loaded===targets.length?' · движения включены':' — анимация загружается'));
+  report.style.background=bad.length?'#8f2936e8':(loaded===targets.length?'#245b45df':'#38253dcc');
+ };
+ for(const el of targets){
+  const label=el.getAttribute('data-gltf-label');
+  el.addEventListener('model-loaded',()=>{results.set(label,'ok');update()});
+  el.addEventListener('model-error',e=>{results.set(label,'error');update();console.error('[Fox AR] model error',label,e.detail)});
+ }
+ setTimeout(()=>{if(results.size<targets.length && ![...results.values()].includes('error')) report.textContent='Долгая загрузка моделей… Проверь интернет или обнови страницу.'},18000);
+})();
+</script>
+</body></html>
