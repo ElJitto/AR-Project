@@ -1,7 +1,7 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-<script src="./magic_v14.js"></script><title>Fox Spirits — ожившая карточка v14</title>
+<script src="./magic_v15.js?v=15"></script><title>Fox Spirits — ожившая карточка v15</title>
 <style>
 *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}body{color:#fff;background:#211626;font:16px system-ui,sans-serif}
 a-scene{position:fixed!important;inset:0!important;display:block!important;width:100vw!important;height:100vh!important;height:100dvh!important;overflow:hidden!important}
@@ -49,7 +49,7 @@ AFRAME.registerComponent('fit-gltf', {
 });
 </script>
 </head><body>
-<div id="intro"><h1>🦊 Маленькое волшебство для тебя ♡</h1><img src="./card.png" alt="Подарочная карточка"><p>Нажми «Оживить», разреши доступ к камере и наведи её на лицевую сторону нашей карточки.</p><button type="button" id="start">✨ Оживить карточку</button><div class="small">Лучше всего работает при хорошем освещении</div><div id="error" role="alert"></div><a class="link" href="./preview.html">Посмотреть 3D без камеры</a></div>
+<div id="intro"><h1>🦊 Маленькое волшебство для тебя ♡</h1><img src="./card.png" alt="Подарочная карточка"><p>Нажми «Оживить», разреши доступ к камере и наведи её на лицевую сторону нашей карточки.</p><button type="button" id="start">✨ Оживить карточку</button><div class="small">Лучше всего работает при хорошем освещении</div><div id="error" role="alert"></div><a class="link" href="./preview_v15.html">Посмотреть 3D без камеры</a></div>
 <div id="status">Наведи камеру на карточку · ✨ хвосты и сакура</div>
 <div id="tools"><button type="button" id="greet" aria-label="Позвать лисят">♡ Позвать</button><button type="button" id="smaller" aria-label="Уменьшить">− размер</button><button type="button" id="bigger" aria-label="Увеличить">+ размер</button></div>
 <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; maxTrack:1; uiScanning: no" embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
