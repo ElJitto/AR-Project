@@ -1,5 +1,5 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
-<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script><script src="./magic.js"></script><title>Fox Spirits — 3D сцена</title>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script><script src="./magic.js"></script><title>Fox Spirits — 3D сцена v9</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#211729;color:white;font:15px system-ui,sans-serif} a{color:inherit}
 #top{position:fixed;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top)) 12px 13px;background:linear-gradient(#241629f0,#24162900);z-index:8;text-align:center;pointer-events:none}
@@ -46,24 +46,24 @@ AFRAME.registerComponent('fit-gltf', {
 </head><body>
 <div id="top"><h1>🦊 Наша маленькая магия ♡</h1><p>Девушка, белый и чёрный лисята — 3D-просмотр</p></div>
 <div id="loadreport">Загрузка персонажей: 0 из 3…</div>
-<div id="hint">Проведи пальцем по экрану, чтобы повернуть сцену. Лисята покачиваются, хвосты слегка шевелятся, а вокруг летит сакура.</div>
+<div id="hint">Проведи пальцем по экрану, чтобы повернуть сцену. Лисята покачиваются, а вокруг летит сакура. Версия v9.</div>
 <div id="bottom"><button class="btn" id="reset">По центру</button><a class="btn" href="./index.html">📷 Открыть AR</a></div>
 <a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" background="color:#352c41">
 
-<a-camera position="0 1.05 4.4" look-controls="enabled:false" wasd-controls="enabled:false" fov="52"></a-camera>
+<a-camera position="0 1.1 5.4" look-controls="enabled:false" wasd-controls="enabled:false" fov="52"></a-camera>
 <a-entity light="type:ambient;intensity:1.8;color:#ffffff"></a-entity>
 <a-entity light="type:directional;intensity:2.1;color:#fff7f0" position="-2 4 4"></a-entity>
 <a-entity light="type:directional;intensity:.65;color:#d5c6ff" position="2 3 -3"></a-entity>
 <a-plane rotation="-90 0 0" position="0 -0.027 0" width="25" height="25" color="#47364e"></a-plane>
 <a-entity id="turn" position="0 0 0">
   <a-entity position="0 0 0.0" animation__breathe="property:position;from:0 0 0;to:0 .025 0;dur:2200;loop:true;dir:alternate;easing:easeInOutSine" animation__sway="property:rotation;from:0 -1 0;to:0 1 0;dur:4000;loop:true;dir:alternate;easing:easeInOutSine">
-    <a-gltf-model src="./girl.glb" fit-gltf="height:1.75" data-gltf-label="Девушка"></a-gltf-model>
+    <a-gltf-model src="./girl.glb" scale="1.65 1.65 1.65" data-gltf-label="Девушка"></a-gltf-model>
   </a-entity>
-  <a-entity position="-.70 .02 .32" rotation="0 12 0" animation__float="property:position;from:-.70 .02 .32;to:-.70 .065 .32;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
-    <a-gltf-model src="./white_fox.glb" fit-gltf="height:.84" data-gltf-label="Белый лисёнок"></a-gltf-model>
+  <a-entity position="-.52 .02 .34" rotation="0 12 0" animation__float="property:position;from:-.52 .02 .34;to:-.52 .065 .34;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
+    <a-gltf-model src="./white_fox.glb" scale=".67 .67 .67" data-gltf-label="Белый лисёнок"></a-gltf-model>
   </a-entity>
-  <a-entity position=".70 .02 .32" rotation="0 -12 0" animation__float="property:position;from:.70 .065 .32;to:.70 .02 .32;dur:2100;loop:true;dir:alternate;easing:easeInOutSine">
-    <a-gltf-model src="./black_fox.glb" fit-gltf="height:.84" data-gltf-label="Чёрный лисёнок"></a-gltf-model>
+  <a-entity position=".52 .02 .34" rotation="0 -12 0" animation__float="property:position;from:.52 .065 .34;to:.52 .02 .34;dur:2100;loop:true;dir:alternate;easing:easeInOutSine">
+    <a-gltf-model src="./black_fox.glb" scale=".67 .67 .67" data-gltf-label="Чёрный лисёнок"></a-gltf-model>
   </a-entity>
   <a-entity sakura-petals="count:14;spread:2.0;speed:1.1" scale="1.6 1.6 1.6" position="0 .2 .2"></a-entity>
   <a-entity position="0 .01 .1"><a-cylinder radius="1.15" height=".03" color="#c9a2b6" material="roughness:1;opacity:.4;transparent:true"></a-cylinder></a-entity>
