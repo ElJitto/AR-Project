@@ -1,0 +1,37 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script><script src="./magic.js"></script><title>Fox Spirits — 3D сцена</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#211729;color:white;font:15px system-ui,sans-serif} a{color:inherit}
+#top{position:fixed;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top)) 12px 13px;background:linear-gradient(#241629f0,#24162900);z-index:8;text-align:center;pointer-events:none}
+#top h1{font-size:23px;margin:0}#top p{margin:5px 0;font-size:13px;color:#f7d4e2}
+#bottom{position:fixed;z-index:9;bottom:calc(16px + env(safe-area-inset-bottom));left:10px;right:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{border:0;background:#ffe4ec;border-radius:28px;padding:12px 17px;color:#5d2840;font:700 14px system-ui;text-decoration:none;display:inline-block;cursor:pointer}
+#hint{position:fixed;z-index:8;bottom:95px;left:15px;right:15px;text-align:center;font-size:12px;color:#f6daea;pointer-events:none;text-shadow:0 1px 4px #000}
+a-scene{width:100vw;height:100dvh;display:block}
+</style></head><body>
+<div id="top"><h1>🦊 Наша маленькая магия ♡</h1><p>Девушка, белый и чёрный лисята — 3D-просмотр</p></div>
+<div id="hint">Проведи пальцем по экрану, чтобы повернуть сцену. Лисята покачиваются, хвосты слегка шевелятся, а вокруг летит сакура.</div>
+<div id="bottom"><button class="btn" id="reset">По центру</button><a class="btn" href="./index.html">📷 Открыть AR</a></div>
+<a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" background="color:#352c41">
+<a-assets timeout="90000"><a-asset-item id="girl" src="./models/girl.glb"></a-asset-item><a-asset-item id="white" src="./models/white_fox.glb"></a-asset-item><a-asset-item id="black" src="./models/black_fox.glb"></a-asset-item></a-assets>
+<a-camera position="0 1.15 5.2" look-controls="enabled:false" wasd-controls="enabled:false" fov="52"></a-camera>
+<a-entity light="type:ambient;intensity:1.8;color:#ffffff"></a-entity>
+<a-entity light="type:directional;intensity:2.1;color:#fff7f0" position="-2 4 4"></a-entity>
+<a-entity light="type:directional;intensity:.65;color:#d5c6ff" position="2 3 -3"></a-entity>
+<a-plane rotation="-90 0 0" position="0 -0.027 0" width="25" height="25" color="#47364e"></a-plane>
+<a-entity id="turn" position="0 0 0">
+  <a-entity position="0 0 0.0" animation__breathe="property:position;from:0 0 0;to:0 .025 0;dur:2200;loop:true;dir:alternate;easing:easeInOutSine" animation__sway="property:rotation;from:0 -1 0;to:0 1 0;dur:4000;loop:true;dir:alternate;easing:easeInOutSine">
+    <a-gltf-model src="#girl" scale="2.05 2.05 2.05"></a-gltf-model>
+  </a-entity>
+  <a-entity position="-.82 .02 .36" rotation="0 12 0" animation__float="property:position;from:-.82 .02 .36;to:-.82 .065 .36;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
+    <a-gltf-model src="#white" scale=".95 .95 .95" fox-tail-wave="speed:1.0;phase:0"></a-gltf-model>
+  </a-entity>
+  <a-entity position=".82 .02 .36" rotation="0 -12 0" animation__float="property:position;from:.82 .065 .36;to:.82 .02 .36;dur:2100;loop:true;dir:alternate;easing:easeInOutSine">
+    <a-gltf-model src="#black" scale=".95 .95 .95" fox-tail-wave="speed:1.14;phase:1.7"></a-gltf-model>
+  </a-entity>
+  <a-entity sakura-petals="count:14;spread:2.0;speed:1.1" scale="1.6 1.6 1.6" position="0 .2 .2"></a-entity>
+  <a-entity position="0 .01 .1"><a-cylinder radius="1.15" height=".03" color="#c9a2b6" material="roughness:1;opacity:.4;transparent:true"></a-cylinder></a-entity>
+</a-entity>
+</a-scene>
+<script src="./preview.js"></script>
+</body></html>
