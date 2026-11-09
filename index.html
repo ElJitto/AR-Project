@@ -61,7 +61,7 @@ AFRAME.registerComponent('fit-gltf', {
   <!-- Карточка стоит вертикально перед камерой: фигуры параллельны рисунку и вынесены немного вперёд. -->
   <a-entity id="scale-root" position="0 -.54 .12">
     <a-entity animation__breathe="property:position;from:0 0 0;to:0 .015 0;dur:2400;loop:true;dir:alternate;easing:easeInOutSine" animation__lean="property:rotation;from:0 -1.0 0;to:0 1.0 0;dur:4200;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="./girl.glb" scale="1.05 1.05 1.05" data-gltf-label="Девушка" position="0 0 0"></a-gltf-model>
+      <a-gltf-model src="./girl.glb?v=10" scale="1.05 1.05 1.05" data-gltf-label="Девушка" position="0 0 0"></a-gltf-model>
     </a-entity>
     <a-entity position="-.26 0 .07" rotation="0 12 0" animation__float="property:position;from:-.26 0 .07;to:-.26 .025 .07;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
       <a-gltf-model src="./white_fox.glb" scale=".40 .40 .40" data-gltf-label="Белый лисёнок"></a-gltf-model>
