@@ -1,7 +1,7 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-<script src="./magic.js"></script><title>Fox Spirits — ожившая карточка v9</title>
+<script src="./magic.js?v=12"></script><title>Fox Spirits — ожившая карточка v12</title>
 <style>
 *{box-sizing:border-box}body{margin:0;color:#fff;background:#211626;font:16px system-ui,sans-serif}
 #intro{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:18px;background:linear-gradient(150deg,#6d3349,#32263f)}
@@ -60,14 +60,14 @@ AFRAME.registerComponent('fit-gltf', {
 <a-entity id="target" mindar-image-target="targetIndex:0">
   <!-- Карточка стоит вертикально перед камерой: фигуры параллельны рисунку и вынесены немного вперёд. -->
   <a-entity id="scale-root" position="0 -.54 .12">
-    <a-entity animation__breathe="property:position;from:0 0 0;to:0 .015 0;dur:2400;loop:true;dir:alternate;easing:easeInOutSine" animation__lean="property:rotation;from:0 -1.0 0;to:0 1.0 0;dur:4200;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="./girl.glb?v=11" scale="1.05 1.05 1.05" data-gltf-label="Девушка" position="0 0 0"></a-gltf-model>
+    <a-entity animation__breathe="property:position;from:0 0 0;to:0 .015 0;dur:2400;loop:true;dir:alternate;easing:easeInOutSine" animation__lean="property:rotation;from:0 -1.0 0;to:0 2.0 0;dur:4200;loop:true;dir:alternate;easing:easeInOutSine">
+      <a-gltf-model src="./girl.glb?v=12" scale="1.05 1.05 1.05" data-gltf-label="Девушка" position="0 0 0"></a-gltf-model>
     </a-entity>
-    <a-entity position="-.26 0 .07" rotation="0 12 0" animation__float="property:position;from:-.26 0 .07;to:-.26 .025 .07;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="./white_fox.glb" scale=".40 .40 .40" data-gltf-label="Белый лисёнок"></a-gltf-model>
+    <a-entity position="-.26 0 .07" rotation="0 12 0" animation__tilt="property:rotation;from:0 11 -2.3;to:0 13 2.3;dur:2800;loop:true;dir:alternate;easing:easeInOutSine" animation__float="property:position;from:-.26 0 .07;to:-.26 .025 .07;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
+      <a-gltf-model src="./white_fox.glb" scale=".40 .40 .40" data-gltf-label="Белый лисёнок" fox-tail-wave="speed:1.0;phase:0"></a-gltf-model>
     </a-entity>
-    <a-entity position=".26 0 .07" rotation="0 -12 0" animation__float="property:position;from:.26 .02 .07;to:.26 0 .07;dur:2050;loop:true;dir:alternate;easing:easeInOutSine">
-      <a-gltf-model src="./black_fox.glb" scale=".40 .40 .40" data-gltf-label="Чёрный лисёнок"></a-gltf-model>
+    <a-entity position=".26 0 .07" rotation="0 -12 0" animation__tilt="property:rotation;from:0 -13 2.3;to:0 -11 -2.3;dur:3100;loop:true;dir:alternate;easing:easeInOutSine" animation__float="property:position;from:.26 .02 .07;to:.26 0 .07;dur:2050;loop:true;dir:alternate;easing:easeInOutSine">
+      <a-gltf-model src="./black_fox.glb" scale=".40 .40 .40" data-gltf-label="Чёрный лисёнок" fox-tail-wave="speed:1.07;phase:1.8"></a-gltf-model>
     </a-entity>
     <a-entity sakura-petals="count:12;spread:1.0;speed:1.0"></a-entity>
     <a-sphere position="-.45 .72 .11" radius=".018" color="#ffbdcc" material="opacity:.85;transparent:true" animation="property:position;from:-.45 .72 .11;to:-.29 .92 .11;dur:3200;dir:alternate;loop:true"></a-sphere>

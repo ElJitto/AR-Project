@@ -1,4 +1,4 @@
-/* Fox Spirits v7 — animated preview without bones.
+/* Fox Spirits v12 — looped motion without bones.
    A GPU vertex-shader tail sway effect; does not add skeletons/true individual tail rigs. */
 AFRAME.registerComponent('fox-tail-wave', {
   schema: {
@@ -31,8 +31,8 @@ AFRAME.registerComponent('fox-tail-wave', {
               float upperTail = smoothstep(0.30, 0.67, position.y);
               float tailWeight = behind * max(sideTail, upperTail * 0.75);
               float wave = uFoxTime * 1.55 + position.x * 12.0 + position.y * 4.3;
-              transformed.x += tailWeight * 0.014 * sin(wave);
-              transformed.y += tailWeight * 0.009 * sin(wave * 0.79 + 1.2);
+              transformed.x += tailWeight * 0.010 * sin(wave);
+              transformed.y += tailWeight * 0.006 * sin(wave * 0.79 + 1.2);
               `
             );
             this.animatedShaders.push(shader);
