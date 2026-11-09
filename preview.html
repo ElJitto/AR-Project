@@ -1,5 +1,5 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
-<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script><script src="./magic.js"></script><title>Fox Spirits — 3D сцена v9</title>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script><script src="./magic.js"></script><title>Fox Spirits — 3D сцена v11</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#211729;color:white;font:15px system-ui,sans-serif} a{color:inherit}
 #top{position:fixed;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top)) 12px 13px;background:linear-gradient(#241629f0,#24162900);z-index:8;text-align:center;pointer-events:none}
@@ -46,7 +46,7 @@ AFRAME.registerComponent('fit-gltf', {
 </head><body>
 <div id="top"><h1>🦊 Наша маленькая магия ♡</h1><p>Девушка, белый и чёрный лисята — 3D-просмотр</p></div>
 <div id="loadreport">Загрузка персонажей: 0 из 3…</div>
-<div id="hint">Проведи пальцем по экрану, чтобы повернуть сцену. Лисята покачиваются, а вокруг летит сакура. Версия v9.</div>
+<div id="hint">Проведи пальцем по экрану, чтобы повернуть сцену. Лисята покачиваются, а вокруг летит сакура. Версия v11.</div>
 <div id="bottom"><button class="btn" id="reset">По центру</button><a class="btn" href="./index.html">📷 Открыть AR</a></div>
 <a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" background="color:#352c41">
 
@@ -57,7 +57,7 @@ AFRAME.registerComponent('fit-gltf', {
 <a-plane rotation="-90 0 0" position="0 -0.027 0" width="25" height="25" color="#47364e"></a-plane>
 <a-entity id="turn" position="0 0 0">
   <a-entity position="0 0 0.0" animation__breathe="property:position;from:0 0 0;to:0 .025 0;dur:2200;loop:true;dir:alternate;easing:easeInOutSine" animation__sway="property:rotation;from:0 -1 0;to:0 1 0;dur:4000;loop:true;dir:alternate;easing:easeInOutSine">
-    <a-gltf-model src="./girl.glb?v=10" scale="1.65 1.65 1.65" data-gltf-label="Девушка"></a-gltf-model>
+    <a-gltf-model src="./girl.glb?v=11" scale="1.65 1.65 1.65" data-gltf-label="Девушка"></a-gltf-model>
   </a-entity>
   <a-entity position="-.52 .02 .34" rotation="0 12 0" animation__float="property:position;from:-.52 .02 .34;to:-.52 .065 .34;dur:1800;loop:true;dir:alternate;easing:easeInOutSine">
     <a-gltf-model src="./white_fox.glb" scale=".67 .67 .67" data-gltf-label="Белый лисёнок"></a-gltf-model>
