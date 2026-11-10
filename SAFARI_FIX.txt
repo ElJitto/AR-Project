@@ -1,0 +1,2 @@
+Safari iPhone: исправлено ненужное окно Deny/Allow в 3D-просмотре.
+Изменены только preview_v27.html и preview.html.

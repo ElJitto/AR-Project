@@ -49,7 +49,7 @@ AFRAME.registerComponent('fit-gltf', {
 <div id="hint" data-i18n="hint">Toca un zorrito: ¡dará un gran salto! 🌸 Los pétalos de cerezo flotan a su alrededor.</div>
 <details id="help"><summary data-i18n="help">❔ Cómo jugar</summary><p data-i18n="helpText">«♡ Juntitos» es un abrazo suave; «🐾 Acariciar» acaricia a cada zorrito. Tócalos para que parpadeen y salten. Los pétalos de cerezo caen a su alrededor.</p><p><button class="btn" type="button" id="white-react" data-i18n="white">🤍 Blanco</button> <button class="btn" type="button" id="black-react" data-i18n="black">🖤 Negro</button></p></details>
 <div id="bottom"><button class="btn" type="button" id="reset" data-i18n="center">Centrar</button><button class="btn" type="button" id="story" data-i18n="hug">♡ Juntitos</button><button class="btn" type="button" id="care" data-i18n="pet">🐾 Acariciar</button><button class="btn" type="button" id="jump" data-i18n="jump">🦊 Saltar</button><button class="btn" type="button" id="blink" data-i18n="blinkOn">👁 Parpadeo: sí</button><a class="btn" href="./index.html" data-local-link data-i18n="arLink">📷 Abrir en AR</a></div>
-<a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" background="color:#352c41">
+<a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false" background="color:#352c41">
 
 <a-camera position="0 1.1 5.4" look-controls="enabled:false" wasd-controls="enabled:false" fov="52"></a-camera>
 <a-entity light="type:ambient;intensity:1.8;color:#ffffff"></a-entity>
