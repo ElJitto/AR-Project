@@ -1,0 +1,73 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#472c4d">
+<title>Fox Spirits — Un mundo en 3D ✨</title>
+<link rel="stylesheet" href="./fox_ui_v27.css?v=27">
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="./magic_v27.js?v=27"></script>
+<script>
+AFRAME.registerComponent('fit-gltf', {
+  schema: { height: {type: 'number', default: 1} },
+  init() {
+    this.el.addEventListener('model-loaded', () => {
+      const THREE = AFRAME.THREE;
+      const root = this.el.getObject3D('mesh');
+      if (!root) return;
+      root.updateMatrixWorld(true);
+      const localBox = new THREE.Box3();
+      const inverse = new THREE.Matrix4().copy(root.matrixWorld).invert();
+      root.traverse(o => {
+        if (!o.isMesh || !o.geometry) return;
+        if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+        const relative = new THREE.Matrix4().multiplyMatrices(inverse, o.matrixWorld);
+        localBox.union(o.geometry.boundingBox.clone().applyMatrix4(relative));
+      });
+      if (localBox.isEmpty()) return;
+      const originalHeight = localBox.max.y - localBox.min.y;
+      if (!Number.isFinite(originalHeight) || originalHeight <= 0) return;
+      const factor = this.data.height / originalHeight;
+      root.scale.multiplyScalar(factor);
+      root.position.set(
+        -(localBox.min.x + localBox.max.x) * 0.5 * factor,
+        -localBox.min.y * factor,
+        -(localBox.min.z + localBox.max.z) * 0.5 * factor
+      );
+      const name = this.el.getAttribute('data-gltf-label') || this.el.id || '3D';
+      console.log('[Fox AR] loaded', name, 'height', originalHeight, 'scale', factor);
+    });
+  }
+});
+</script>
+</head><body data-mode="preview"><div id="intro"><button type="button" id="language" aria-label="Cambiar idioma / Сменить язык">ES / RU</button><div class="gift-card"><span aria-hidden="true" class="petal" style="--x:7%;--s:12px;--d:11s;--delay:-5s"></span><span aria-hidden="true" class="petal" style="--x:19%;--s:10px;--d:13s;--delay:-8s"></span><span aria-hidden="true" class="petal" style="--x:38%;--s:15px;--d:14s;--delay:-2s"></span><span aria-hidden="true" class="petal" style="--x:57%;--s:10px;--d:12s;--delay:-4s"></span><span aria-hidden="true" class="petal" style="--x:74%;--s:13px;--d:16s;--delay:-10s"></span><span aria-hidden="true" class="petal" style="--x:88%;--s:9px;--d:11s;--delay:-7s"></span>
+  <span class="gift-eyebrow" data-i18n="eyebrow">UN PEQUEÑO REGALO</span><h1 data-i18n="heading">Un poquito de magia para ti ✨</h1>
+  <div class="gift-picture"><img src="./card.png" alt="Tarjeta de regalo"></div>
+  <p class="subtitle" data-i18n="subtitle">Dos zorritos, un abrazo y un mundo que cobra vida solo para ti.</p>
+  <div class="gift-loading" role="status" aria-live="polite"><div class="load-line" id="load-line">Preparando a los personajes: 0 de 3</div><div class="load-steps"><span></span><span></span><span></span></div><div class="load-detail" id="load-detail">Los zorritos se están preparando…</div></div>
+  <div id="error" class="gift-error" role="alert"></div>
+  <a class="gift-alt" href="./ar_v27.html" data-local-link data-i18n="arLink">📷 Abrir en AR</a>
+</div></div>
+<div id="top"><h1 data-i18n="topTitle">🦊 Nuestra pequeña magia ♡</h1><p data-i18n="topDesc">Ella y dos zorritos, en un mundo 3D</p></div>
+<div id="loadreport" data-i18n="loading">Cargando los modelos 3D…</div>
+<div id="hint" data-i18n="hint">Toca un zorrito: ¡dará un gran salto! 🌸 Los pétalos de cerezo flotan a su alrededor.</div>
+<details id="help"><summary data-i18n="help">❔ Cómo jugar</summary><p data-i18n="helpText">«♡ Juntitos» es un abrazo suave; «🐾 Acariciar» acaricia a cada zorrito. Tócalos para que parpadeen y salten. Los pétalos de cerezo caen a su alrededor.</p><p><button class="btn" type="button" id="white-react" data-i18n="white">🤍 Blanco</button> <button class="btn" type="button" id="black-react" data-i18n="black">🖤 Negro</button></p></details>
+<div id="bottom"><button class="btn" type="button" id="reset" data-i18n="center">Centrar</button><button class="btn" type="button" id="story" data-i18n="hug">♡ Juntitos</button><button class="btn" type="button" id="care" data-i18n="pet">🐾 Acariciar</button><button class="btn" type="button" id="jump" data-i18n="jump">🦊 Saltar</button><button class="btn" type="button" id="blink" data-i18n="blinkOn">👁 Parpadeo: sí</button><a class="btn" href="./ar_v27.html" data-local-link data-i18n="arLink">📷 Abrir en AR</a></div>
+<a-scene embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" background="color:#352c41">
+
+<a-camera position="0 1.1 5.4" look-controls="enabled:false" wasd-controls="enabled:false" fov="52"></a-camera>
+<a-entity light="type:ambient;intensity:1.8;color:#ffffff"></a-entity>
+<a-entity light="type:directional;intensity:2.1;color:#fff7f0" position="-2 4 4"></a-entity>
+<a-entity light="type:directional;intensity:.65;color:#d5c6ff" position="2 3 -3"></a-entity>
+<a-plane rotation="-90 0 0" position="0 -0.027 0" width="25" height="25" color="#47364e"></a-plane>
+<a-entity id="turn" position="0 0 0" spirit-show="mode:preview" fox-touch-picker care-glints="mode:preview" magic-hearts="centerY:1.17;size:.12">
+  <a-entity data-actor="girl">
+    <a-gltf-model src="./girl_cuddle_v19.glb?v=19" scale="1.65 1.65 1.65" data-gltf-label="Девушка" morph-clip-player></a-gltf-model>
+  </a-entity>
+  <a-entity data-actor="white">
+    <a-gltf-model src="./white_fox_animated.glb?v=16" scale=".67 .67 .67" data-gltf-label="Белый лисёнок" morph-clip-player fox-face-reaction="tone:white;side:-1"></a-gltf-model>
+  </a-entity>
+  <a-entity data-actor="black">
+    <a-gltf-model src="./black_fox_animated.glb?v=16" scale=".67 .67 .67" data-gltf-label="Чёрный лисёнок" morph-clip-player fox-face-reaction="tone:black;side:1"></a-gltf-model>
+  </a-entity>
+  <a-entity sakura-petals="count:22;spread:2.0;speed:1.0" scale="1.6 1.6 1.6" position="0 .2 .2"></a-entity>
+  <a-entity position="0 .01 .1"><a-cylinder radius="1.15" height=".03" color="#c9a2b6" material="roughness:1;opacity:.4;transparent:true"></a-cylinder></a-entity>
+</a-entity>
+</a-scene>
+<script src="./preview.js"></script><script src="./fox_ui_v27.js?v=27"></script></body></html>

@@ -1,20 +1,9 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#472c4d">
+<title>Fox Spirits — Un poquito de magia ✨</title>
+<link rel="stylesheet" href="./fox_ui_v27.css?v=27">
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-<script src="./magic_v26.js?v=26"></script><title>Fox Spirits — ожившая карточка v26</title>
-<style>
-*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}body{color:#fff;background:#211626;font:16px system-ui,sans-serif}
-a-scene{position:fixed!important;inset:0!important;display:block!important;width:100vw!important;height:100vh!important;height:100dvh!important;overflow:hidden!important}
-#intro{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:18px;background:linear-gradient(150deg,#6d3349,#32263f)}
-#intro h1{font-size:clamp(22px,6vw,30px);margin:0}#intro p{line-height:1.5;max-width:380px;margin:0;color:#ffedf4}
-#intro img{height:min(42vh,300px);max-width:min(78vw,240px);object-fit:contain;box-shadow:0 10px 30px #0006;border-radius:7px}
-button,.link{background:#ffe5ee;border:0;border-radius:32px;color:#742c47;font:700 16px system-ui;padding:13px 22px;cursor:pointer;text-decoration:none}button:disabled{opacity:.5}
-#status{position:fixed;z-index:10;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:#321b34da;border-radius:40px;padding:11px 18px;min-width:260px;max-width:90vw;text-align:center;font-size:13px}
-#tools{position:fixed;z-index:10;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:9px}
-#tools button{font-size:12px;padding:9px 11px} #tools{flex-wrap:wrap;gap:7px;padding:0 8px}
-#error{max-width:400px;white-space:pre-wrap;color:#ffd9da;font-size:13px}
-.small{font-size:12px;color:#ffe5ee}
-.a-enter-vr-button{display:none!important}</style>
+<script src="./magic_v27.js?v=27"></script>
 <script>
 AFRAME.registerComponent('fit-gltf', {
   schema: { height: {type: 'number', default: 1} },
@@ -48,10 +37,19 @@ AFRAME.registerComponent('fit-gltf', {
   }
 });
 </script>
-</head><body>
-<div id="intro"><h1>🦊 Маленькое волшебство для тебя ♡</h1><img src="./card.png" alt="Подарочная карточка"><p>Нажми «Оживить», разреши доступ к камере и наведи её на лицевую сторону нашей карточки.</p><button type="button" id="start">✨ Оживить карточку</button><div class="small">Лучше всего работает при хорошем освещении</div><div id="error" role="alert"></div><a class="link" href="./preview.html">Посмотреть 3D без камеры</a></div>
-<div id="status">Наведи камеру на карточку, затем нажми на лисёнка 🦊</div>
-<div id="tools"><button type="button" id="story" aria-label="Полуобъятие">♡ Рядом</button><button type="button" id="care" aria-label="Погладить">🐾 Погладить</button><button type="button" id="jump" aria-label="Прыжок лисят">🦊 Прыжок</button><button type="button" id="smaller" aria-label="Уменьшить">− размер</button><button type="button" id="bigger" aria-label="Увеличить">+ размер</button></div>
+</head><body data-mode="ar"><div id="intro"><button type="button" id="language" aria-label="Cambiar idioma / Сменить язык">ES / RU</button><div class="gift-card"><span aria-hidden="true" class="petal" style="--x:7%;--s:12px;--d:11s;--delay:-5s"></span><span aria-hidden="true" class="petal" style="--x:19%;--s:10px;--d:13s;--delay:-8s"></span><span aria-hidden="true" class="petal" style="--x:38%;--s:15px;--d:14s;--delay:-2s"></span><span aria-hidden="true" class="petal" style="--x:57%;--s:10px;--d:12s;--delay:-4s"></span><span aria-hidden="true" class="petal" style="--x:74%;--s:13px;--d:16s;--delay:-10s"></span><span aria-hidden="true" class="petal" style="--x:88%;--s:9px;--d:11s;--delay:-7s"></span>
+  <span class="gift-eyebrow" data-i18n="eyebrow">UN PEQUEÑO REGALO</span>
+  <h1 data-i18n="heading">Un poquito de magia para ti ✨</h1>
+  <div class="gift-picture"><img src="./card.png" alt="Tarjeta de regalo"></div>
+  <p class="subtitle" data-i18n="subtitle">Dos zorritos, un abrazo y un mundo que cobra vida solo para ti.</p>
+  <div class="gift-loading" role="status" aria-live="polite"><div class="load-line" id="load-line">Preparando a los personajes: 0 de 3</div><div class="load-steps"><span></span><span></span><span></span></div><div id="load-detail" class="load-detail">Los zorritos se están preparando…</div></div>
+  <button type="button" id="start" class="gift-cta" data-i18n="start">✨ Dar vida a la tarjeta</button>
+  <div id="error" class="gift-error" role="alert"></div>
+  <a class="gift-alt" data-local-link href="./preview.html" data-i18n="preview">Ver en 3D sin cámara</a>
+  <span class="gift-foot" data-i18n="foot">Para una mejor experiencia, busca un lugar bien iluminado.</span>
+</div></div>
+<div id="status" data-i18n="scan">Apunta la cámara hacia la tarjeta 🦊</div>
+<div id="tools"><button type="button" id="story" data-i18n="hug">♡ Juntitos</button><button type="button" id="care" data-i18n="pet">🐾 Acariciar</button><button type="button" id="jump" data-i18n="jump">🦊 Saltar</button><button type="button" id="smaller" data-i18n="smaller">− Tamaño</button><button type="button" id="bigger" data-i18n="bigger">+ Tamaño</button></div>
 <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; maxTrack:1; uiScanning: no" embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
 
 <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
@@ -75,16 +73,4 @@ AFRAME.registerComponent('fit-gltf', {
     <a-sphere position=".42 .65 .13" radius=".015" color="#fff0a6" material="opacity:.85;transparent:true" animation="property:position;from:.42 .65 .13;to:.35 .88 .13;dur:2500;dir:alternate;loop:true"></a-sphere>
   </a-entity>
 </a-entity></a-scene>
-<script src="./ar.js"></script>
-<script>document.querySelector("#story").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-story"));document.querySelector("#care").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-care"));document.querySelector("#jump").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-jump-all"));document.querySelector("#target").addEventListener("targetFound",()=>document.querySelector("#scale-root").emit("fox-story"));</script>
-<script>
-(()=>{
- const names=[...document.querySelectorAll('[data-gltf-label]')];const results=new Map();
- const status=document.getElementById('status');
- for(const el of names){const name=el.getAttribute('data-gltf-label');
-  el.addEventListener('model-loaded',()=>{results.set(name,'ok');if(results.size===names.length&&![...results.values()].includes('error'))status.textContent='Все три 3D-модели загружены ✨'});
-  el.addEventListener('model-error',e=>{results.set(name,'error');status.textContent='Ошибка загрузки: '+name;console.error('GLB load error',name,e.detail)});
- }
-})();
-</script>
-</body></html>
+<script src="./fox_ui_v27.js?v=27"></script></body></html>

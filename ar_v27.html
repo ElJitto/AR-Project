@@ -1,0 +1,76 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#472c4d">
+<title>Fox Spirits — Un poquito de magia ✨</title>
+<link rel="stylesheet" href="./fox_ui_v27.css?v=27">
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+<script src="./magic_v27.js?v=27"></script>
+<script>
+AFRAME.registerComponent('fit-gltf', {
+  schema: { height: {type: 'number', default: 1} },
+  init() {
+    this.el.addEventListener('model-loaded', () => {
+      const THREE = AFRAME.THREE;
+      const root = this.el.getObject3D('mesh');
+      if (!root) return;
+      root.updateMatrixWorld(true);
+      const localBox = new THREE.Box3();
+      const inverse = new THREE.Matrix4().copy(root.matrixWorld).invert();
+      root.traverse(o => {
+        if (!o.isMesh || !o.geometry) return;
+        if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+        const relative = new THREE.Matrix4().multiplyMatrices(inverse, o.matrixWorld);
+        localBox.union(o.geometry.boundingBox.clone().applyMatrix4(relative));
+      });
+      if (localBox.isEmpty()) return;
+      const originalHeight = localBox.max.y - localBox.min.y;
+      if (!Number.isFinite(originalHeight) || originalHeight <= 0) return;
+      const factor = this.data.height / originalHeight;
+      root.scale.multiplyScalar(factor);
+      root.position.set(
+        -(localBox.min.x + localBox.max.x) * 0.5 * factor,
+        -localBox.min.y * factor,
+        -(localBox.min.z + localBox.max.z) * 0.5 * factor
+      );
+      const name = this.el.getAttribute('data-gltf-label') || this.el.id || '3D';
+      console.log('[Fox AR] loaded', name, 'height', originalHeight, 'scale', factor);
+    });
+  }
+});
+</script>
+</head><body data-mode="ar"><div id="intro"><button type="button" id="language" aria-label="Cambiar idioma / Сменить язык">ES / RU</button><div class="gift-card"><span aria-hidden="true" class="petal" style="--x:7%;--s:12px;--d:11s;--delay:-5s"></span><span aria-hidden="true" class="petal" style="--x:19%;--s:10px;--d:13s;--delay:-8s"></span><span aria-hidden="true" class="petal" style="--x:38%;--s:15px;--d:14s;--delay:-2s"></span><span aria-hidden="true" class="petal" style="--x:57%;--s:10px;--d:12s;--delay:-4s"></span><span aria-hidden="true" class="petal" style="--x:74%;--s:13px;--d:16s;--delay:-10s"></span><span aria-hidden="true" class="petal" style="--x:88%;--s:9px;--d:11s;--delay:-7s"></span>
+  <span class="gift-eyebrow" data-i18n="eyebrow">UN PEQUEÑO REGALO</span>
+  <h1 data-i18n="heading">Un poquito de magia para ti ✨</h1>
+  <div class="gift-picture"><img src="./card.png" alt="Tarjeta de regalo"></div>
+  <p class="subtitle" data-i18n="subtitle">Dos zorritos, un abrazo y un mundo que cobra vida solo para ti.</p>
+  <div class="gift-loading" role="status" aria-live="polite"><div class="load-line" id="load-line">Preparando a los personajes: 0 de 3</div><div class="load-steps"><span></span><span></span><span></span></div><div id="load-detail" class="load-detail">Los zorritos se están preparando…</div></div>
+  <button type="button" id="start" class="gift-cta" data-i18n="start">✨ Dar vida a la tarjeta</button>
+  <div id="error" class="gift-error" role="alert"></div>
+  <a class="gift-alt" data-local-link href="./preview_v27.html" data-i18n="preview">Ver en 3D sin cámara</a>
+  <span class="gift-foot" data-i18n="foot">Para una mejor experiencia, busca un lugar bien iluminado.</span>
+</div></div>
+<div id="status" data-i18n="scan">Apunta la cámara hacia la tarjeta 🦊</div>
+<div id="tools"><button type="button" id="story" data-i18n="hug">♡ Juntitos</button><button type="button" id="care" data-i18n="pet">🐾 Acariciar</button><button type="button" id="jump" data-i18n="jump">🦊 Saltar</button><button type="button" id="smaller" data-i18n="smaller">− Tamaño</button><button type="button" id="bigger" data-i18n="bigger">+ Tamaño</button></div>
+<a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; maxTrack:1; uiScanning: no" embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
+
+<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+<a-entity light="type:ambient;intensity:1.7;color:#ffffff"></a-entity>
+<a-entity light="type:directional;intensity:2.1;color:#fff6eb" position="-1 2 2"></a-entity>
+<a-entity light="type:directional;intensity:.5;color:#d4cfff" position="1 1 -2"></a-entity>
+<a-entity id="target" mindar-image-target="targetIndex:0">
+  <!-- Карточка стоит вертикально перед камерой: фигуры параллельны рисунку и вынесены немного вперёд. -->
+  <a-entity id="scale-root" position="0 -.54 .12" spirit-show="mode:ar" fox-touch-picker care-glints="mode:ar" magic-hearts="centerY:.78;size:.08">
+    <a-entity data-actor="girl">
+      <a-gltf-model src="./girl_cuddle_v19.glb?v=19" scale="1.05 1.05 1.05" data-gltf-label="Девушка" morph-clip-player position="0 0 0"></a-gltf-model>
+    </a-entity>
+    <a-entity data-actor="white">
+      <a-gltf-model src="./white_fox_animated.glb?v=16" scale=".40 .40 .40" data-gltf-label="Белый лисёнок" morph-clip-player fox-face-reaction="tone:white;side:-1"></a-gltf-model>
+    </a-entity>
+    <a-entity data-actor="black">
+      <a-gltf-model src="./black_fox_animated.glb?v=16" scale=".40 .40 .40" data-gltf-label="Чёрный лисёнок" morph-clip-player fox-face-reaction="tone:black;side:1"></a-gltf-model>
+    </a-entity>
+    <a-entity sakura-petals="count:16;spread:1.0;speed:1.0"></a-entity>
+    <a-sphere position="-.45 .72 .11" radius=".018" color="#ffbdcc" material="opacity:.85;transparent:true" animation="property:position;from:-.45 .72 .11;to:-.29 .92 .11;dur:3200;dir:alternate;loop:true"></a-sphere>
+    <a-sphere position=".42 .65 .13" radius=".015" color="#fff0a6" material="opacity:.85;transparent:true" animation="property:position;from:.42 .65 .13;to:.35 .88 .13;dur:2500;dir:alternate;loop:true"></a-sphere>
+  </a-entity>
+</a-entity></a-scene>
+<script src="./fox_ui_v27.js?v=27"></script></body></html>
