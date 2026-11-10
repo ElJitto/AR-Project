@@ -1,7 +1,7 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#3d2438">
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-<script src="./magic_v15.js?v=15"></script><title>Fox Spirits — ожившая карточка v15</title>
+<script src="./magic_v26.js?v=26"></script><title>Fox Spirits — ожившая карточка v26</title>
 <style>
 *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}body{color:#fff;background:#211626;font:16px system-ui,sans-serif}
 a-scene{position:fixed!important;inset:0!important;display:block!important;width:100vw!important;height:100vh!important;height:100dvh!important;overflow:hidden!important}
@@ -11,10 +11,10 @@ a-scene{position:fixed!important;inset:0!important;display:block!important;width
 button,.link{background:#ffe5ee;border:0;border-radius:32px;color:#742c47;font:700 16px system-ui;padding:13px 22px;cursor:pointer;text-decoration:none}button:disabled{opacity:.5}
 #status{position:fixed;z-index:10;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:#321b34da;border-radius:40px;padding:11px 18px;min-width:260px;max-width:90vw;text-align:center;font-size:13px}
 #tools{position:fixed;z-index:10;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:9px}
-#tools button{font-size:13px;padding:9px 12px} #tools{flex-wrap:wrap;gap:7px;padding:0 8px}
+#tools button{font-size:12px;padding:9px 11px} #tools{flex-wrap:wrap;gap:7px;padding:0 8px}
 #error{max-width:400px;white-space:pre-wrap;color:#ffd9da;font-size:13px}
 .small{font-size:12px;color:#ffe5ee}
-</style>
+.a-enter-vr-button{display:none!important}</style>
 <script>
 AFRAME.registerComponent('fit-gltf', {
   schema: { height: {type: 'number', default: 1} },
@@ -49,9 +49,9 @@ AFRAME.registerComponent('fit-gltf', {
 });
 </script>
 </head><body>
-<div id="intro"><h1>🦊 Маленькое волшебство для тебя ♡</h1><img src="./card.png" alt="Подарочная карточка"><p>Нажми «Оживить», разреши доступ к камере и наведи её на лицевую сторону нашей карточки.</p><button type="button" id="start">✨ Оживить карточку</button><div class="small">Лучше всего работает при хорошем освещении</div><div id="error" role="alert"></div><a class="link" href="./preview_v15.html">Посмотреть 3D без камеры</a></div>
-<div id="status">Наведи камеру на карточку · ✨ хвосты и сакура</div>
-<div id="tools"><button type="button" id="greet" aria-label="Позвать лисят">♡ Позвать</button><button type="button" id="smaller" aria-label="Уменьшить">− размер</button><button type="button" id="bigger" aria-label="Увеличить">+ размер</button></div>
+<div id="intro"><h1>🦊 Маленькое волшебство для тебя ♡</h1><img src="./card.png" alt="Подарочная карточка"><p>Нажми «Оживить», разреши доступ к камере и наведи её на лицевую сторону нашей карточки.</p><button type="button" id="start">✨ Оживить карточку</button><div class="small">Лучше всего работает при хорошем освещении</div><div id="error" role="alert"></div><a class="link" href="./preview.html">Посмотреть 3D без камеры</a></div>
+<div id="status">Наведи камеру на карточку, затем нажми на лисёнка 🦊</div>
+<div id="tools"><button type="button" id="story" aria-label="Полуобъятие">♡ Рядом</button><button type="button" id="care" aria-label="Погладить">🐾 Погладить</button><button type="button" id="jump" aria-label="Прыжок лисят">🦊 Прыжок</button><button type="button" id="smaller" aria-label="Уменьшить">− размер</button><button type="button" id="bigger" aria-label="Увеличить">+ размер</button></div>
 <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; maxTrack:1; uiScanning: no" embedded renderer="colorManagement:true;antialias:true;physicallyCorrectLights:true" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
 
 <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
@@ -60,26 +60,23 @@ AFRAME.registerComponent('fit-gltf', {
 <a-entity light="type:directional;intensity:.5;color:#d4cfff" position="1 1 -2"></a-entity>
 <a-entity id="target" mindar-image-target="targetIndex:0">
   <!-- Карточка стоит вертикально перед камерой: фигуры параллельны рисунку и вынесены немного вперёд. -->
-  <a-entity id="scale-root" position="0 -.54 .12" spirit-show="mode:ar" magic-hearts="centerY:.78;size:.08">
+  <a-entity id="scale-root" position="0 -.54 .12" spirit-show="mode:ar" fox-touch-picker care-glints="mode:ar" magic-hearts="centerY:.78;size:.08">
     <a-entity data-actor="girl">
-      <a-gltf-model src="./girl.glb?v=14" scale="1.05 1.05 1.05" data-gltf-label="Девушка" position="0 0 0"></a-gltf-model>
+      <a-gltf-model src="./girl_cuddle_v19.glb?v=19" scale="1.05 1.05 1.05" data-gltf-label="Девушка" morph-clip-player position="0 0 0"></a-gltf-model>
     </a-entity>
     <a-entity data-actor="white">
-      <a-gltf-model src="./white_fox.glb" scale=".40 .40 .40" data-gltf-label="Белый лисёнок" fox-tail-wave="speed:1;phase:0;amplitude:.018"></a-gltf-model>
+      <a-gltf-model src="./white_fox_animated.glb?v=16" scale=".40 .40 .40" data-gltf-label="Белый лисёнок" morph-clip-player fox-face-reaction="tone:white;side:-1"></a-gltf-model>
     </a-entity>
     <a-entity data-actor="black">
-      <a-gltf-model src="./black_fox.glb" scale=".40 .40 .40" data-gltf-label="Чёрный лисёнок" fox-tail-wave="speed:1.08;phase:1.8;amplitude:.018"></a-gltf-model>
+      <a-gltf-model src="./black_fox_animated.glb?v=16" scale=".40 .40 .40" data-gltf-label="Чёрный лисёнок" morph-clip-player fox-face-reaction="tone:black;side:1"></a-gltf-model>
     </a-entity>
-    <a-entity sakura-petals="count:12;spread:1.0;speed:1.0"></a-entity>
+    <a-entity sakura-petals="count:16;spread:1.0;speed:1.0"></a-entity>
     <a-sphere position="-.45 .72 .11" radius=".018" color="#ffbdcc" material="opacity:.85;transparent:true" animation="property:position;from:-.45 .72 .11;to:-.29 .92 .11;dur:3200;dir:alternate;loop:true"></a-sphere>
     <a-sphere position=".42 .65 .13" radius=".015" color="#fff0a6" material="opacity:.85;transparent:true" animation="property:position;from:.42 .65 .13;to:.35 .88 .13;dur:2500;dir:alternate;loop:true"></a-sphere>
   </a-entity>
 </a-entity></a-scene>
 <script src="./ar.js"></script>
-<script>
-  document.querySelector("#greet").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-greet"));
-  document.querySelector("#target").addEventListener("targetFound",()=>document.querySelector("#scale-root").emit("fox-greet"));
-</script>
+<script>document.querySelector("#story").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-story"));document.querySelector("#care").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-care"));document.querySelector("#jump").addEventListener("click",()=>document.querySelector("#scale-root").emit("fox-jump-all"));document.querySelector("#target").addEventListener("targetFound",()=>document.querySelector("#scale-root").emit("fox-story"));</script>
 <script>
 (()=>{
  const names=[...document.querySelectorAll('[data-gltf-label]')];const results=new Map();
