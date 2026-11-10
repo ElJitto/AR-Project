@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fox Spirits — диагностика GLB</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(150deg,#24182d,#59334e);color:#fff;font:16px system-ui,-apple-system,sans-serif;padding:24px 16px 60px;min-height:100dvh}
+main{max-width:540px;margin:auto}
+h1{font-size:23px;margin:12px 0}p{color:#f5dbe8;line-height:1.5}
+.card{padding:15px;margin:14px 0;border-radius:16px;background:#fff1;border:1px solid #ffffff31}
+button{display:block;width:100%;border:0;border-radius:18px;padding:13px 16px;margin:9px 0;background:#ffe3ee;color:#5b2945;font-weight:750;font-size:15px}
+button:disabled{opacity:.5}
+pre{font:12px/1.55 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#140e1dbb;border-radius:13px;padding:12px}
+.ok{color:#abffbe}.err{color:#ffb1b1}.note{font-size:12px}
+</style></head><body><main>
+<h1>🦊 Проверка загрузки Fox Spirits</h1>
+<p>Это отдельная страница проверки. Она не изменяет 3D-сцену, модели или настройки камеры.</p>
+<div class="card">
+<div id="state">Подготовка проверки…</div>
+<pre id="report"></pre>
+<button id="again">🔄 Проверить ещё раз</button>
+<button id="full">📦 Проверить полную загрузку белого лисёнка (5 МБ)</button>
+<button id="copy">📋 Скопировать отчёт</button>
+</div>
+<p class="note">Если тест выдаёт ошибку, скопируй отчёт и отправь его в наш чат. В отчёте нет паролей или личных данных — только тип браузера, WebGL и ответы загрузки моделей.</p>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+let busy=false;
+const lines=[];
+function log(s){lines.push(s);$('#report').textContent=lines.join('\n');}
+function setState(s){$('#state').textContent=s;}
+const models=[
+ ['Девушка','girl_cuddle_v19.glb',18115964],
+ ['Белый лисёнок','white_fox_animated.glb',5203732],
+ ['Чёрный лисёнок','black_fox_animated.glb',4879156]
+];
+const controller=()=>new AbortController();
+const timeout=(c,ms)=>setTimeout(()=>c.abort(),ms);
+const fmtMs=t=>(Math.round(t/100)/10)+' c';
+async function testSmall(name,file,expected){
+  const c=controller(),kill=timeout(c,20000),started=performance.now();
+  try{
+    const u='./'+file+'?foxdiag='+Date.now();
+    const r=await fetch(u,{cache:'no-store',headers:{'Range':'bytes=0-65535'},signal:c.signal});
+    const http=r.status;
+    const type=r.headers.get('content-type')||'?';
+    const length=r.headers.get('content-length')||'?';
+    const cr=r.headers.get('content-range')||'?';
+    if(!r.ok){log('❌ '+name+': HTTP '+http+' ('+type+')');return false;}
+    const reader=r.body?.getReader();
+    let chunk;
+    if(reader){chunk=await reader.read();try{await reader.cancel()}catch{}}
+    else chunk={value:new Uint8Array(await r.arrayBuffer())};
+    const b=chunk.value||new Uint8Array(0);
+    const magic=(b.length>=4)?String.fromCharCode(...b.subarray(0,4)):'';
+    const valid=magic==='glTF';
+    log((valid?'✅ ':'❌ ')+name+': HTTP '+http+'; '+fmtMs(performance.now()-started)+
+      '; GLB='+ (valid?'да':'НЕТ')+'; тип='+type+'; длина='+length+'; диапазон='+cr);
+    return valid;
+  }catch(e){log('❌ '+name+': '+(e.name==='AbortError'?'тайм-аут 20 секунд':String(e.message||e)));return false;}
+  finally{clearTimeout(kill)}
+}
+async function start(){
+ if(busy)return;busy=true;$('#again').disabled=true;$('#full').disabled=true;lines.length=0;
+ log('Адрес страницы: '+location.origin+location.pathname);
+ log('Браузер: '+navigator.userAgent);
+ log('Сеть: '+(navigator.onLine?'онлайн':'браузер считает, что офлайн'));
+ try{
+   const canvas=document.createElement('canvas');
+   let gl=canvas.getContext('webgl2')||canvas.getContext('webgl');
+   log('WebGL: '+(gl?(gl instanceof WebGL2RenderingContext?'WebGL 2':'WebGL 1'):'НЕ ДОСТУПЕН'));
+   gl?.getExtension('WEBGL_lose_context')?.loseContext();
+ }catch(e){log('WebGL: ошибка '+e.message)}
+ let good=0;
+ for(const [name,file,size] of models){setState('Проверяю: '+name+'…');good+=Number(await testSmall(name,file,size));}
+ log('ИТОГ: '+good+' из 3 GLB доступны.');
+ setState(good===3?'✅ Ссылки моделей доступны':'⚠️ Обнаружена проблема с доступом к GLB');
+ busy=false;$('#again').disabled=false;$('#full').disabled=false;
+}
+async function full(){
+ if(busy)return;busy=true;$('#again').disabled=true;$('#full').disabled=true;
+ setState('Скачивание белого лисёнка целиком…');
+ const c=controller(),kill=timeout(c,90000),t=performance.now();
+ try{
+  const res=await fetch('./white_fox_animated.glb?fulltest='+Date.now(),{cache:'no-store',signal:c.signal});
+  if(!res.ok)throw Error('HTTP '+res.status);
+  let total=0,signature='',reader=res.body?.getReader();
+  if(reader){
+   while(true){const {done,value}=await reader.read();if(done)break;
+    if(!total && value.length>=4)signature=String.fromCharCode(...value.subarray(0,4));
+    total+=value.length;
+    setState('Скачано '+(total/1024/1024).toFixed(1)+' МБ');
+   }
+  }else {const buf=await res.arrayBuffer();total=buf.byteLength;signature=String.fromCharCode(...new Uint8Array(buf,0,4))}
+  log((total===5203732&&signature==='glTF'?'✅':'⚠️')+' Полное скачивание: '+total+' байт за '+fmtMs(performance.now()-t)+'; GLB='+signature);
+  setState('Полная загрузка завершена');
+ }catch(e){log('❌ Полное скачивание: '+(e.name==='AbortError'?'тайм-аут 90 секунд':String(e.message||e)));setState('Ошибка скачивания')}
+ finally{clearTimeout(kill);busy=false;$('#again').disabled=false;$('#full').disabled=false}
+}
+$('#again').onclick=start;$('#full').onclick=full;
+$('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(lines.join('\n'));setState('✅ Отчёт скопирован')}
+catch{const t=document.createElement('textarea');t.value=lines.join('\n');document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();setState('Отчёт скопирован (резервный способ)')}};
+start();
+})();
+</script></body></html>
